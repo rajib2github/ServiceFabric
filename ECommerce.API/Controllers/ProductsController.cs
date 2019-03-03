@@ -37,6 +37,22 @@ namespace ECommerce.API.Controllers
             });
         }
 
+        [HttpGet("{id}")]
+        public async Task<IEnumerable<ApiProduct>> Get(Guid id)
+        {
+            IEnumerable<Product> allProducts = await _catalogService.GetAllProducts();
+
+            return allProducts.Select(p => new ApiProduct
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                IsAvailable = p.Availability > 0
+            }).Where(e=> e.Id == id);
+
+        }
+
         [HttpPost]
         public async Task Post([FromBody] ApiProduct product)
         {
